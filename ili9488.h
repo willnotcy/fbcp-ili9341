@@ -12,7 +12,7 @@
 #define DISPLAY_WRITE_PIXELS 0x2C
 
 #define DISPLAY_NATIVE_WIDTH 320
-#define DISPLAY_NATIVE_HEIGHT 480
+#define DISPLAY_NATIVE_HEIGHT 240
 
 // 18 bits/pixel R6G6B6 format (padded to 3 bytes per pixel), and no 16-bits R5G6B5 mode.
 #define DISPLAY_COLOR_FORMAT_R6X2G6X2B6X2

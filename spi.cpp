@@ -49,7 +49,8 @@ volatile SPIRegisterFile *spi = 0;
 
 // Points to the system timer register. N.B. spec sheet says this is two low and high parts, in an 32-bit aligned (but not 64-bit aligned) address. Profiling shows
 // that Pi 3 Model B does allow reading this as a u64 load, and even when unaligned, it is around 30% faster to do so compared to loading in parts "lo | (hi << 32)".
-volatile uint64_t *systemTimerRegister = 0;
+volatile uint32_t *systemTimerRegisterLo = 0;
+volatile uint32_t *systemTimerRegisterHi = 0;
 
 void DumpSPICS(uint32_t reg)
 {
@@ -515,7 +516,8 @@ int InitSPI()
   if (bcm2835 == MAP_FAILED) FATAL_ERROR("mapping /dev/mem failed");
   spi = (volatile SPIRegisterFile*)((uintptr_t)bcm2835 + BCM2835_SPI0_BASE);
   gpio = (volatile GPIORegisterFile*)((uintptr_t)bcm2835 + BCM2835_GPIO_BASE);
-  systemTimerRegister = (volatile uint64_t*)((uintptr_t)bcm2835 + BCM2835_TIMER_BASE + 0x04); // Generates an unaligned 64-bit pointer, but seems to be fine.
+  systemTimerRegisterLo = (volatile uint32_t*)((uintptr_t)bcm2835 + BCM2835_TIMER_BASE + 0x04);
+  systemTimerRegisterHi = (volatile uint32_t*)((uintptr_t)bcm2835 + BCM2835_TIMER_BASE + 0x08);
   // TODO: On graceful shutdown, (ctrl-c signal?) close(mem_fd)
 #endif
 
