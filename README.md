@@ -1,3 +1,49 @@
+# Personal(Willnotcy) instructions.
+Wiring:
+```
+5V -> 5V -- RED
+GND -> GND -- BROWN
+SCK -> GPIO 11 (SPI SCLK) -- ORANGE
+RESET -> GPIO 25 -- YELLOW 
+MOSI -> GPIO 10 (SPI MOSI) -- GREEN
+DC -> GPIO 24 -- PURPLE
+CS -> GPIO 8 (SPI CE0) -- BLUE
+Encoder Switch -> GPIO 22 -- WHITE
+Encoder Out B -> GPIO 17 -- GREY
+Encoder Out 9 -> GPIO 27 -- BLACK
+```
+
+Configration (/boot/config.txt):
+```
+#dtparam=spi=on
+#dtoverlay=vc4-kms-v3d
+
+[all]
+hdmi_group=2
+hdmi_mode=87
+hdmi_cvt=320 240 60 1 0 0 0
+hdmi_force_hotplug=1
+gpu_mem=160
+avoid_warnings=2
+```
+
+Build:
+```
+cmake -DST7796=ON -DGPIO_TFT_DATA_CONTROL=24 -DGPIO_TFT_RESET_PIN=25 -DSPI_BUS_CLOCK_DIVISOR=40 -DUSE_DMA_TRANSFERS=OFF ..
+make -j4
+sudo ./fbcp-ili9341
+```
+
+
+Rotary Encoder (Credit to SomeSpaceNerd):
+[https://github.com/SomeSpaceNerd/KlipperScreen-Encoder-Driver](https://github.com/willnotcy/KlipperScreen-Encoder-Driver.git)
+
+
+
+Inspired by https://github.com/jokubasver/Anycubic-Kobra-Go-Neo-LCD-Driver/tree/master which unfortunately did not work on 64bit Mainsail OS.
+
+
+
 # Feb 2024 Update
 
 The era of fbcp-ili9341 has come to an end. Fbcp-ili9341 was built on top of the Raspberry Pi's [VideoCore DispmanX API](https://elinux.org/Raspberry_Pi_VideoCore_APIs#vc_dispmanx_.2A).
